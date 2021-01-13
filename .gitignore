@@ -50,6 +50,8 @@ x64/
 *.sln
 *.csproj
 *.dll
+*.xml
+*.json
 
 # Visual C++ cache files
 ipch/
