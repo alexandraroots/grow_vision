@@ -9,9 +9,11 @@ namespace growtimelapse
     public class Program
     {
 
-        private static readonly string cameraUrl = @"http://192.168.1.74//ISAPI/Streaming/Channels/101/picture?snapShotImageType=JPEG";
+        private readonly static string cameraIP = Environment.GetEnvironmentVariable("CAMERA_IP");
+        private static string cameraUrl;
         public static async Task Main(string[] args)
         {
+            cameraUrl = "http://" + cameraIP + "//ISAPI/Streaming/Channels/101/picture?snapShotImageType=JPEG";
             ImageClient currentClient = new ImageClient();
             Store store = new Store("timelapse1");
             TimeSpan interval = new TimeSpan(0, 1, 0);
