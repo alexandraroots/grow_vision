@@ -13,7 +13,7 @@ namespace growtimelapse
     {
         public const string LoggerOutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-        public const string AppInsightsKeySetting = "ApplicationInsights:InstrumentationKey";
+        public const string AppInsightsKeyVariable = "APPINSIGHTSKEY";
 
         public const string LogFileName = "log.txt";
 
@@ -26,7 +26,7 @@ namespace growtimelapse
                     rollingInterval: RollingInterval.Day)
                 .ReadFrom.Configuration(Configuration.Instance);
 
-            var appInsightsKey = Configuration.Instance.GetValue<string>(AppInsightsKeySetting, null);
+            var appInsightsKey = Environment.GetEnvironmentVariable(AppInsightsKeyVariable);
             if (!string.IsNullOrEmpty(appInsightsKey))
             {
                 // Note that AppInsights sink ignores the output template if given in the json configuration,
@@ -43,7 +43,7 @@ namespace growtimelapse
 
             if(string.IsNullOrEmpty(appInsightsKey)) 
             {
-                logger.Warning($"{AppInsightsKeySetting} setting is not found or empty. ApplicationInsights logging is not enabled.");
+                logger.Warning($"{AppInsightsKeyVariable} environment variable is not found or empty. ApplicationInsights logging is not enabled.");
             }
 
             return logger;
