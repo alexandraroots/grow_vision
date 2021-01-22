@@ -11,7 +11,7 @@ namespace growtimelapse
 {
     public static class LoggerFactory 
     {
-        public const string LoggerOutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Properties} {Message:lj}{NewLine}{Exception}";
+        public const string LoggerOutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
         public const string AppInsightsKeySetting = "ApplicationInsights:InstrumentationKey";
 

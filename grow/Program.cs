@@ -27,38 +27,34 @@ namespace growtimelapse
 
             logger.Information($"Timelapse service is starting. Camera host is {cameraIP}.");
 
-                        Console.ReadLine();
-return 0;
+            cameraUrl = "http://" + cameraIP + "//ISAPI/Streaming/Channels/101/picture?snapShotImageType=JPEG";
+            ImageClient currentClient = new ImageClient();
+            Store store = new Store("timelapse1");
+            TimeSpan interval = new TimeSpan(1, 0, 0);
+            while (true)
+            {
+                try
+                {
+                    logger.Information("Capturing a frame...");
 
-        //     cameraUrl = "http://" + cameraIP + "//ISAPI/Streaming/Channels/101/picture?snapShotImageType=JPEG";
-        //     ImageClient currentClient = new ImageClient();
-        //     Store store = new Store("timelapse1");
-        //     TimeSpan interval = new TimeSpan(1, 0, 0);
-        //     while (true)
-        //     {
-        //         try
-        //         {
-        //             logger.Information("Capturing a frame...");
+                    HttpResponseMessage response = await currentClient.client.GetAsync(cameraUrl);
+                    response.EnsureSuccessStatusCode();
+                    Stream responseImage = await response.Content.ReadAsStreamAsync();
 
-        //             HttpResponseMessage response = await currentClient.client.GetAsync(cameraUrl);
-        //             response.EnsureSuccessStatusCode();
-        //             Stream responseImage = await response.Content.ReadAsStreamAsync();
+                    logger.Information("Sending the frame to cloud...");
 
-        //             logger.Information("Sending the frame to cloud...");
+                    BlobClient blobClient = store.containerClient.GetBlobClient(DateTime.Now.ToString("yyyyMMddHHmmss") + ".JPEG");
+                    await blobClient.UploadAsync(responseImage, true);
 
-        //             BlobClient blobClient = store.containerClient.GetBlobClient(DateTime.Now.ToString("yyyyMMddHHmmss") + ".JPEG");
-        //             await blobClient.UploadAsync(responseImage, true);
+                }
+                catch (Exception exc) 
+                {
+                    logger.Error(exc, "Error capturing a frame");
+                }
 
-        //         }
-        //         catch (Exception exc) 
-        //         {
-        //             logger.Error(exc, "Error capturing a frame");
-        //         }
-
-        //         System.Threading.Thread.Sleep(interval);
-
+                System.Threading.Thread.Sleep(interval);
+            }
         }
-
-
     }
 }
+
