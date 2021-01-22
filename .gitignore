@@ -48,7 +48,6 @@ x64/
 *.scc
 *.DS_Store
 *.sln
-*.csproj
 *.dll
 *.xml
 *.json

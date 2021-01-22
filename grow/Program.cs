@@ -16,7 +16,7 @@ namespace growtimelapse
             cameraUrl = "http://" + cameraIP + "//ISAPI/Streaming/Channels/101/picture?snapShotImageType=JPEG";
             ImageClient currentClient = new ImageClient();
             Store store = new Store("timelapse1");
-            TimeSpan interval = new TimeSpan(0, 1, 0);
+            TimeSpan interval = new TimeSpan(1, 0, 0);
             while (true)
             {
                 try
